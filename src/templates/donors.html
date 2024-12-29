@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Donors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>List of Donors</h1>
+
+    <!-- Поисковая форма -->
+    <form method="GET" action="/donors" class="search-form">
+        <input type="text" name="name" placeholder="Search by Name">
+        <input type="number" name="age" placeholder="Search by Age">
+        <select name="blood_type">
+            <option value="">All Blood Types</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Таблица с донорами -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Blood Type</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donor in donors %}
+            <tr>
+                <!-- Предполагая, что donor — это кортеж, например (1, 'John', 30, 'O+', '123456789') -->
+                <td>{{ donor[1] }}</td> <!-- Имя -->
+                <td>{{ donor[2] }}</td> <!-- Возраст -->
+                <td>{{ donor[3] }}</td> <!-- Группа крови -->
+                <td>{{ donor[4] }}</td> <!-- Контакт -->
+                <td>
+                    <!-- Кнопка для удаления донора -->
+                    <form method="POST" action="/delete_donor/{{ donor[0] }}" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                    <!-- Ссылка для редактирования донора -->
+                    <a href="/edit_donor/{{ donor[0] }}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/">Go Back to Home</a>
+</body>
+</html>
